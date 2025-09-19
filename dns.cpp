@@ -2,8 +2,7 @@
 
 int main() {
     std::cout << "Hello, World!" << std::endl;
-    int a = 10;
-    int b = 20;
-    int c = a + b;
+    std::string str = "Hello";
+    std::cout << str << std::endl;
     return 0;
 }
