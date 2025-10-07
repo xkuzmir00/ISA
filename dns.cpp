@@ -1,8 +1,12 @@
-#include <iostream>
+// Author: Richard Kuzmisin
+// Login: xkuzmir00 (260077)
 
-int main() {
-    std::cout << "Hello, World!" << std::endl;
-    std::string str = "Hello";
-    std::cout << str << std::endl;
+using namespace std;
+#include <iostream>
+#include "models/arguments.h"
+#include "utility/argumentParser.h"
+
+int main(int argc, char* argv[]) {
+
     return 0;
 }
