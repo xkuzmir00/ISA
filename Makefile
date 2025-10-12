@@ -1,15 +1,14 @@
 # Author: Richard Kuzmisin
 # Login: xkuzmir00 (260077)
 
-
 CXX := g++
 CXXFLAGS := -Wall -std=c++20
 TARGET := dns
-SRC := dns.cpp models/arguments.cpp
+SRCDIRS := . models utility
+SRC := $(foreach dir, $(SRCDIRS), $(wildcard $(dir)/*.cpp))
 
 .PHONY: test clean
 
-# Default: compile and run
 all: $(TARGET)
 
 $(TARGET): $(SRC)

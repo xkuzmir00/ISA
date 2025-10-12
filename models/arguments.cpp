@@ -1,6 +1,9 @@
+// Author: Richard Kuzmisin
+// Login: xkuzmir00 (260077)
+
 using namespace std;
 #include <string>
-#include "arguments.h"
+#include "arguments.hpp"
 
 Arguments::Arguments(string address, string port, string fileName){
     this->address = address;
