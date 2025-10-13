@@ -30,14 +30,20 @@ bool parseArguments(int argc, char* argv[], Arguments* args){
             return false;
         }
 
-        if(currentArg == "-s" && !processServerArgument(argValue, args)){
-            return false;
+        if(currentArg == "-s"){
+            if(!processServerArgument(argValue, args)){
+                return false;
+            }
         }
-        else if(currentArg == "-p" && !processPortArgument(argValue, args)){
-            return false;
+        else if(currentArg == "-p"){
+            if(!processPortArgument(argValue, args)){
+                return false;
+            }
         }
-        else if(currentArg == "-f" && !processFilterArgument(argValue, args)){
-            return false;
+        else if(currentArg == "-f"){
+            if(!processFilterArgument(argValue, args)){
+                return false;
+            }
         }
         else {
             cout << "Invalid argument type " << currentArg << ".\n";
