@@ -1,3 +1,6 @@
+// Author: Richard Kuzmisin
+// Login: xkuzmir00 (260077)
+
 #include <iostream>
 #include <vector>
 #include <string>
