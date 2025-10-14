@@ -10,7 +10,7 @@ int convertStringToInt(string num){
     }
     catch(const exception& e)
     {
-        cout << "Value " << num << " is not valid integer value.\n";
+        cerr << "Value " << num << " is not valid integer value.\n";
         return -1;
     }
 }

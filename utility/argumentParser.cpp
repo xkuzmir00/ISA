@@ -19,14 +19,14 @@ bool parseArguments(int argc, char* argv[], Arguments* args){
         }
 
         if (seenArguments.find(currentArg) != seenArguments.end()) {
-            cout << "Duplicate argument: " << currentArg << ".\n";
+            cerr << "Duplicate argument: " << currentArg << ".\n";
             return false;
         }
         seenArguments.insert(currentArg);
 
         string argValue = arguments.at(i + 1);
         if(argValue == ""){
-            cout << "Value for the argument " << currentArg << " is empty.\n";
+            cerr << "Value for the argument " << currentArg << " is empty.\n";
             return false;
         }
 
@@ -46,7 +46,7 @@ bool parseArguments(int argc, char* argv[], Arguments* args){
             }
         }
         else {
-            cout << "Invalid argument type " << currentArg << ".\n";
+            cerr << "Invalid argument type " << currentArg << ".\n";
             return false;
         }
 
@@ -54,7 +54,7 @@ bool parseArguments(int argc, char* argv[], Arguments* args){
     }
 
     if(!(seenArguments.find("-s") != seenArguments.end()) || !(seenArguments.find("-f") != seenArguments.end())){
-        cout << "Missing server or filename argument.\n";
+        cerr << "Missing server or filename argument.\n";
         return false;
     }
 
@@ -63,7 +63,7 @@ bool parseArguments(int argc, char* argv[], Arguments* args){
 
 bool isArgLengthValid(int argc){
     if(argc != 5 && argc != 7){
-        cout << "Incorrect argument count.\n";
+        cerr << "Incorrect argument count.\n";
         return false;
     }
 
@@ -72,7 +72,7 @@ bool isArgLengthValid(int argc){
 
 bool isCurrentArgumentLast(int argc, int i, string &arg){
     if(argc-1 == i){
-        cout << "Invalid argument " << arg << ", no argument value entered.\n";
+        cerr << "Invalid argument " << arg << ", no argument value entered.\n";
         return true;
     }
 
@@ -88,7 +88,7 @@ bool processServerArgument(std::string &argument, Arguments* args) {
 
     int ret = getaddrinfo(argument.c_str(), nullptr, &hints, &result);
     if (ret != 0) {
-        cout << "Could not resolve " << argument << ".\n";
+        cerr << "Could not resolve " << argument << ".\n";
         return false;
     }
 
@@ -113,7 +113,7 @@ bool processServerArgument(std::string &argument, Arguments* args) {
 
 bool processPortArgument(string &argument, Arguments* args){
     if(argument.at(0) == '-' || argument == "0"){
-        cout << "Port has to be a positive integer value.\n";
+        cerr << "Port has to be a positive integer value.\n";
         return false;
     }
 
@@ -123,7 +123,7 @@ bool processPortArgument(string &argument, Arguments* args){
     }
 
     if(convertedPort > 65535){
-        cout << "Entered port is out of bounds (1 - 65535).\n";
+        cerr << "Entered port is out of bounds (1 - 65535).\n";
         return false;
     }
 
@@ -133,7 +133,7 @@ bool processPortArgument(string &argument, Arguments* args){
 
 bool processFilterArgument(string &argument, Arguments* args){
     if(!fileExists(argument)){
-        cout << "Entered file '" << argument << "' doesn't exist.\n";
+        cerr << "Entered file '" << argument << "' doesn't exist.\n";
         return false; 
     }
 

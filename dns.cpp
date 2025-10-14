@@ -27,12 +27,12 @@ int main(int argc, char* argv[]) {
     
     ifstream file(args.fileName);
     if(!file) {
-        cout << "An error occured while opening " << args.fileName << ".\n";
+        cerr << "An error occured while opening " << args.fileName << ".\n";
         return 1;
     }
 
     if(isFileEmpty(file)){
-        cout << "The entered file is empty.\n";
+        cerr << "The entered file is empty.\n";
         return 1;
     }
 

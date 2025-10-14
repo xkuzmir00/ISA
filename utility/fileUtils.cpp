@@ -25,12 +25,12 @@ bool processFilteredDomains(ifstream& file, set<string>& filteredDomains){
             filteredDomains.insert(line);
         }
     }catch(int errorCode) {
-        cout << "An error has occured while processing the list of domains. Error code: " << errorCode << "\n";
+        cerr << "An error has occured while processing the list of domains. Error code: " << errorCode << "\n";
         return false;
     }
 
     if(filteredDomains.size() < 1){
-        cout << "The list of domains to filter is empty.\n";
+        cerr << "The list of domains to filter is empty.\n";
         return false;
     }
 
