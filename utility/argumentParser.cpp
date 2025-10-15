@@ -127,7 +127,7 @@ bool processPortArgument(string &argument, Arguments* args){
         return false;
     }
 
-    args->port = argument;
+    args->port = convertedPort;
     return true;
 }
 

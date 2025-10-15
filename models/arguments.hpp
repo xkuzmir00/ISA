@@ -9,7 +9,7 @@ using namespace std;
 class Arguments {
     public:
         string address;
-        string port;
+        int port;
         string fileName;
-        Arguments(string address, string port, string fileName);
+        Arguments(string address, int port, string fileName);
 };
