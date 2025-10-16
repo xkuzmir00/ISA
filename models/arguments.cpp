@@ -5,8 +5,12 @@ using namespace std;
 #include <string>
 #include "arguments.hpp"
 
-Arguments::Arguments(string address, int port, string fileName){
-    this->address = address;
-    this->port = port;
-    this->fileName = fileName;
+Arguments::Arguments(int port, const std::string& fileName)
+    : resolverAddr(nullptr), port(port), fileName(fileName) {}
+
+Arguments::~Arguments() {
+    if (resolverAddr != nullptr) {
+        freeaddrinfo(resolverAddr);
+        resolverAddr = nullptr;
+    }
 }

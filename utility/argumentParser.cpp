@@ -79,35 +79,21 @@ bool isCurrentArgumentLast(int argc, int i, string &arg){
     return false;
 }
 
-bool processServerArgument(string &argument, Arguments* args) {
+bool processServerArgument(const string& argument, Arguments* args) {
     struct addrinfo hints{};
-    struct addrinfo *result = nullptr;
-
     hints.ai_family = AF_UNSPEC;
     hints.ai_socktype = SOCK_DGRAM;
 
-    int ret = getaddrinfo(argument.c_str(), nullptr, &hints, &result);
+    if (args->resolverAddr != nullptr) {
+        freeaddrinfo(args->resolverAddr);
+        args->resolverAddr = nullptr;
+    }
+
+    int ret = getaddrinfo(argument.c_str(), nullptr, &hints, &args->resolverAddr);
     if (ret != 0) {
-        cerr << "Could not resolve " << argument << ".\n";
+        std::cerr << "Could not resolve " << argument << ": " << gai_strerror(ret) << "\n";
         return false;
     }
-
-    struct addrinfo *p = result;
-    char ip[INET6_ADDRSTRLEN];
-    void *address;
-
-    if (p->ai_family == AF_INET) {
-        struct sockaddr_in *ipv4 = reinterpret_cast<struct sockaddr_in *>(p->ai_addr);
-        address = &(ipv4->sin_addr);
-    } else {
-        struct sockaddr_in6 *ipv6 = reinterpret_cast<struct sockaddr_in6 *>(p->ai_addr);
-        address = &(ipv6->sin6_addr);
-    }
-
-    inet_ntop(p->ai_family, address, ip, sizeof(ip));
-
-    args->address = string(ip);
-    freeaddrinfo(result);
     return true;
 }
 

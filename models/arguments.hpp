@@ -5,11 +5,13 @@
 
 using namespace std;
 #include <string>
+#include <netdb.h>
 
 class Arguments {
     public:
-        string address;
+        struct addrinfo* resolverAddr;
         int port;
         string fileName;
-        Arguments(string address, int port, string fileName);
+        Arguments(int port, const string& fileName);;
+        ~Arguments();
 };

@@ -17,7 +17,7 @@ using namespace std;
 #include "utility/dnsUtils.hpp"
 
 int main(int argc, char* argv[]) {
-    Arguments args("", defaultPort, "");
+    Arguments args(defaultPort, "");
 
     if(!parseArguments(argc, argv, &args)){
         return 1;
@@ -77,6 +77,8 @@ int main(int argc, char* argv[]) {
                 sendRefusedResponse(sock, cliaddress, len, messageBuffer, num);
                 continue;
             }
+
+            
         } else {
             cout << "Failed to parse DNS query.\n";
         }

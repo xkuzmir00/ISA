@@ -7,6 +7,7 @@
 #include <cstring>
 #include "../utility/argumentParser.hpp"
 #include "../models/arguments.hpp"
+#include "../constants.hpp"
 
 using namespace std;
 
@@ -29,15 +30,12 @@ bool runTest(const string &testName, const vector<string> &arguments, bool expec
     int argc;
     char **argv;
     prepareArgv(arguments, argc, argv);
-    Arguments args("", "53", "");
+    Arguments args(defaultPort, "");
     bool result = parseArguments(argc, argv, &args);
     freeArgv(argc, argv);
 
     if (result == expected) {
         cout << "[PASS] " << testName << endl;
-        if (result) {
-            cout << "  Parsed address: " << args.address << ", port: " << args.port << ", file: " << args.fileName << "\n";
-        }
         return true;
     } else {
         cout << "[FAIL] " << testName << " Expected " << expected << " but got " << result << endl;
