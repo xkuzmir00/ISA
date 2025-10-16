@@ -79,7 +79,7 @@ bool isCurrentArgumentLast(int argc, int i, string &arg){
     return false;
 }
 
-bool processServerArgument(std::string &argument, Arguments* args) {
+bool processServerArgument(string &argument, Arguments* args) {
     struct addrinfo hints{};
     struct addrinfo *result = nullptr;
 
@@ -106,7 +106,7 @@ bool processServerArgument(std::string &argument, Arguments* args) {
 
     inet_ntop(p->ai_family, address, ip, sizeof(ip));
 
-    args->address = std::string(ip);
+    args->address = string(ip);
     freeaddrinfo(result);
     return true;
 }

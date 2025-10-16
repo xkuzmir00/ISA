@@ -11,8 +11,8 @@
 #include <set>
 using namespace std;
 
-bool fileExists (const std::string& name);
+bool fileExists (const string& name);
 
-bool isFileEmpty(std::ifstream& file);
+bool isFileEmpty(ifstream& file);
 
 bool processFilteredDomains(ifstream& file, set<string>& filteredDomains);

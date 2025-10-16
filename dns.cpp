@@ -8,24 +8,16 @@ using namespace std;
 #include <arpa/inet.h>
 #include <unistd.h>
 #include <cstring>
+#include "constants.hpp"
 #include "models/arguments.hpp"
 #include "utility/argumentParser.hpp"
 #include "utility/fileUtils.hpp"
 #include "utility/socketUtils.hpp"
-
-void display(set<string> s)
-{
-    set<string>::iterator itr;
-    
-    for (itr = s.begin(); 
-        itr != s.end(); itr++) 
-    {
-        cout << *itr << " \n";
-    }
-}  
+#include "utility/addressUtils.hpp"
+#include "utility/dnsUtils.hpp"
 
 int main(int argc, char* argv[]) {
-    Arguments args("", 53, "");
+    Arguments args("", defaultPort, "");
 
     if(!parseArguments(argc, argv, &args)){
         return 1;
@@ -53,35 +45,41 @@ int main(int argc, char* argv[]) {
     }
     
     while (true) {
-        char messageBuffer[512];
+        char messageBuffer[messageBufferLength];
         sockaddr_storage cliaddress;
         socklen_t len = sizeof(cliaddress);
 
-        ssize_t n = recvfrom(sock, messageBuffer, sizeof(messageBuffer), 0, (struct sockaddr*)&cliaddress, &len);
-        if (n < 0) {
+        ssize_t num = recvfrom(sock, messageBuffer, sizeof(messageBuffer), 0, (struct sockaddr*) &cliaddress, &len);
+        if (num < 0) {
             continue;
         }
 
         char clientIP[INET6_ADDRSTRLEN] = {0};
 
         if (cliaddress.ss_family == AF_INET) {
-            sockaddr_in *addr_in = (sockaddr_in *)&cliaddress;
+            sockaddr_in *addr_in = (sockaddr_in *) &cliaddress;
             inet_ntop(AF_INET, &(addr_in->sin_addr), clientIP, sizeof(clientIP));
         } else if (cliaddress.ss_family == AF_INET6) {
-            sockaddr_in6 *addr_in6 = (sockaddr_in6 *)&cliaddress;
+            sockaddr_in6 *addr_in6 = (sockaddr_in6 *) &cliaddress;
             inet_ntop(AF_INET6, &(addr_in6->sin6_addr), clientIP, sizeof(clientIP));
         }
 
-        cout << "Data received: ";
-        for (ssize_t i = 0; i < n; ++i) {
-            char c = messageBuffer[i];
-            if (isprint(static_cast<unsigned char>(c))) {
-                cout << c;
-            } else {
-                cout << '.';
+        string domainName;
+        uint16_t queryType;
+
+        if (parseDNSQuery(messageBuffer, num, domainName, queryType)) {
+            if(queryType != typeADNS){
+                sendRefusedResponse(sock, cliaddress, len, messageBuffer, num);
+                continue;
             }
+
+            if(isDomainFiltered(domainName, filteredDomains)) {
+                sendRefusedResponse(sock, cliaddress, len, messageBuffer, num);
+                continue;
+            }
+        } else {
+            cout << "Failed to parse DNS query.\n";
         }
-        cout << endl;
     }
 
     close(sock);

@@ -3,8 +3,9 @@
 
 #include "fileUtils.hpp"
 #include "stringUtils.hpp"
+#include "addressUtils.hpp"
 
-bool fileExists (const std::string& name){
+bool fileExists (const string& name){
     struct stat buffer;
     return (stat (name.c_str(), &buffer) == 0); 
 }
@@ -19,6 +20,11 @@ bool processFilteredDomains(ifstream& file, set<string>& filteredDomains){
         while(getline(file, line)){
             line = trim(line);
             if(line.empty() || line.at(0) == '#'){
+                continue;
+            }
+
+            if (containsInvalidChars(line)) {
+                cerr << "Warning: domain \"" << line << "\" contains invalid characters and will be skipped.\n";
                 continue;
             }
 
