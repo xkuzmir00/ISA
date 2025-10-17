@@ -8,8 +8,10 @@ using namespace std;
 #include <arpa/inet.h>
 #include <unistd.h>
 #include <cstring>
+#include <pthread.h>
 #include "constants.hpp"
 #include "models/arguments.hpp"
+#include "models/threadArgs.hpp"
 #include "utility/argumentParser.hpp"
 #include "utility/fileUtils.hpp"
 #include "utility/socketUtils.hpp"
@@ -17,7 +19,7 @@ using namespace std;
 #include "utility/dnsUtils.hpp"
 
 int main(int argc, char* argv[]) {
-    Arguments args(defaultPort, "");
+    Arguments args(defaultPort, defaultPort, "");
 
     if(!parseArguments(argc, argv, &args)){
         return 1;
@@ -39,7 +41,7 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    int sock = setUpSocket(args.port);
+    int sock = setUpSocket(args.listenPort);
     if(sock < 0){
         return 1;
     }
@@ -78,6 +80,15 @@ int main(int argc, char* argv[]) {
                 continue;
             }
 
+            ThreadArgs* threadArgs = prepareThreadArgs(sock, cliaddress, len, messageBuffer, num, &args);
+            if (!threadArgs) {
+                cerr << "Failed to allocate thread arguments\n";
+                continue;
+            }
+
+            pthread_t threadId;
+            pthread_create(&threadId, NULL, handleQuery, threadArgs);
+            pthread_detach(threadId);
             
         } else {
             cout << "Failed to parse DNS query.\n";

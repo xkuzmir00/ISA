@@ -30,7 +30,7 @@ bool runTest(const string &testName, const vector<string> &arguments, bool expec
     int argc;
     char **argv;
     prepareArgv(arguments, argc, argv);
-    Arguments args(defaultPort, "");
+    Arguments args(defaultPort, defaultPort, "");
     bool result = parseArguments(argc, argv, &args);
     freeArgv(argc, argv);
 

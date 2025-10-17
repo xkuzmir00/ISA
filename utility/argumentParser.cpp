@@ -2,6 +2,7 @@
 // Login: xkuzmir00 (260077)
 
 #include "argumentParser.hpp"
+#include "../models/arguments.hpp"
 
 bool parseArguments(int argc, char* argv[], Arguments* args){
     if(!isArgLengthValid(argc)){
@@ -79,22 +80,8 @@ bool isCurrentArgumentLast(int argc, int i, string &arg){
     return false;
 }
 
-bool processServerArgument(const string& argument, Arguments* args) {
-    struct addrinfo hints{};
-    hints.ai_family = AF_UNSPEC;
-    hints.ai_socktype = SOCK_DGRAM;
-
-    if (args->resolverAddr != nullptr) {
-        freeaddrinfo(args->resolverAddr);
-        args->resolverAddr = nullptr;
-    }
-
-    int ret = getaddrinfo(argument.c_str(), nullptr, &hints, &args->resolverAddr);
-    if (ret != 0) {
-        std::cerr << "Could not resolve " << argument << ": " << gai_strerror(ret) << "\n";
-        return false;
-    }
-    return true;
+bool processServerArgument(string& argument, Arguments* args) {
+    return setupForwardAddress(*args, argument);
 }
 
 bool processPortArgument(string &argument, Arguments* args){
@@ -113,7 +100,7 @@ bool processPortArgument(string &argument, Arguments* args){
         return false;
     }
 
-    args->port = convertedPort;
+    args->listenPort = convertedPort;
     return true;
 }
 

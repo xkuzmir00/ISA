@@ -25,7 +25,7 @@ bool isArgFormatValid(int argc, char* argv[]);
 
 bool isCurrentArgumentLast(int argc, int i, string &arg);
 
-bool processServerArgument(const string& argument, Arguments* args);
+bool processServerArgument(string& argument, Arguments* args);
 
 bool processPortArgument(string &argument, Arguments* args);
 
